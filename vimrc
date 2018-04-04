@@ -82,87 +82,32 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " cscope setting
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"   function! AddCscope()
-"      if has("cscope")
-"          set csprg=/usr/bin/cscope
-"          set csto=1
-"          set cst
-"          set nocsverb
-"
-"          " add any database in current directory
-"          let subDir = expand("%:p")
-"          let lastSplashIndex=strridx(subDir, "/")
-"          let l:cscopeFilePath=expand("")
-"
-"          while lastSplashIndex >= 1
-"              let lastSplashIndex=strridx(subDir, "/")
-"              let l:curDir=strpart(subDir, 0, lastSplashIndex)
-"              let l:cscopeFilePath=expand(l:curDir . "/" . "cscope.out")
-"              if filereadable(l:cscopeFilePath)
-"                  break
-"              endif
-"              let subDir=l:curDir
-"          endwhile
-"
-"          echo "cscopeFile " l:cscopeFilePath
-"
-"          cscope add l:curDir
-"          set csverb
-"      endif
-"   endfunction
-"    if has("cscope")
-"      set csprg=/usr/bin/cscope
-"      set csto=1
-"      set cst
-"      set nocsverb
-"
-"      " add any database in current directory
-"      if filereadable("cscope.out")
-"          cscope add cscope.out
-"       endif
-"      set csverb
-"    endif
+function! AddCscope()
+  if has("cscope")
+      set csprg=/usr/bin/cscope
+      set csto=1
+      set cst
+      set nocsverb
 
-"   function! AddCscope()
-"       if has("cscope")
-"           set csprg=/usr/bin/cscope
-"           set csto=1
-"           set cst
-"           set nocsverb
-"
-"           " add any database in current directory
-"           let subDir = expand("%:p")
-"           let lastSplashIndex=strridx(subDir, "/")
-"           let cscopeFilePath=expand("")
-"
-"           while lastSplashIndex >= 1
-"               let lastSplashIndex=strridx(subDir, "/")
-"               let curDir=strpart(subDir, 0, lastSplashIndex)
-"               let cscopeFilePath=expand(curDir . "/" . "cscope.out")
-"               if filereadable(cscopeFilePath)
-"                   break
-"               endif
-"               let subDir=curDir
-"           endwhile
-"
-"           echo "cscopeFile " cscopeFilePath
-"
-"           cscope add curDir
-"           set csverb
-"       endif
-"   endfunction
-if has("cscope")
-    set csprg=/usr/bin/cscope
-    set csto=1
-    set cst
-    set nocsverb
+      " add any database in current directory
+      let subDir = expand("%:p")
+      let lastSplashIndex=strridx(subDir, "/")
+      let l:cscopeFilePath=expand("")
 
-    " add any database in current directory
-    if filereadable("cscope.out")
-        cscope add cscope.out
-    endif
-    set csverb
-endif
+      while lastSplashIndex >= 1
+          let lastSplashIndex=strridx(subDir, "/")
+          let l:curDir=strpart(subDir, 0, lastSplashIndex)
+          let l:cscopeFilePath=expand(l:curDir . "/" . "cscope.out")
+          if filereadable(l:cscopeFilePath)
+              break
+          endif
+          let subDir=l:curDir
+      endwhile
+
+      exec 'cs add ' . l:cscopeFilePath
+      set csverb
+  endif
+endfunction
 
 nmap <C-a>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 nmap <C-a>g :cs find g <C-R>=expand("<cword>")<CR><CR>
@@ -173,10 +118,11 @@ nmap <C-a>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
 nmap <C-a>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 nmap <C-a>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
-nmap w.  :resize +20<CR>
-nmap w,  :resize -20<CR>
-nmap w-  :vertical resize -20<CR>
-nmap w=  :vertical resize +20<CR>
+"one ops to most largest
+nmap w.  :resize +120<CR>
+nmap w,  :resize -120<CR>
+nmap w-  :vertical resize -120<CR>
+nmap w=  :vertical resize +120<CR>
 
 function InitSessionAndInfo()
     let sessionsdir="/home/guoguo/.vim/sessions"
@@ -230,7 +176,7 @@ function RestoreSessionAndInfo()
         execute 'rviminfo ' . g:viminfoFileName
     endif
 
-"    call AddCscope()
+    call AddCscope()
 
     if has("syntax")
         syntax on
